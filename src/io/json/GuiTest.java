@@ -24,7 +24,7 @@ import org.json.simple.parser.ParseException;
 class MyFrame extends JFrame
 {
 	// 변수선언
-	JTextField tfName, tfTel, tfJumin, tfGender, tfAge, tfHome;
+	JTextField tfName, tfTel, tfRsn, tfGender, tfAge, tfHome;
 	JButton bSave, bOpen;
 	
 	// 객체 생성
@@ -32,7 +32,7 @@ class MyFrame extends JFrame
 		super("나의 첫 화면");
 		tfName = new JTextField(15);
 		tfTel = new JTextField(15);
-		tfJumin = new JTextField(15);
+		tfRsn = new JTextField(15);
 		tfGender = new JTextField(15);
 		tfAge = new JTextField(15);
 		tfHome = new JTextField(15);
@@ -51,8 +51,8 @@ class MyFrame extends JFrame
 		p_center.add( tfName );
 		p_center.add( new JLabel("전화"));
 		p_center.add( tfTel );
-		p_center.add( new JLabel("주민"));
-		p_center.add( tfJumin );
+		p_center.add( new JLabel("주민번호"));
+		p_center.add( tfRsn );
 		p_center.add( new JLabel("성별"));
 		p_center.add( tfGender );
 		p_center.add( new JLabel("나이"));
@@ -99,8 +99,18 @@ class MyFrame extends JFrame
 	 */
 	void saveData() {		
 	
+		JSONObject obj = new JSONObject();
+		obj.put("name", tfName.getText());
+		obj.put("tel", tfTel.getText());
+		obj.put("rsn", tfRsn.getText());
+		obj.put("gender", tfGender.getText());
+		obj.put("age", tfAge.getText());
+		obj.put("home", tfHome.getText());
+		
 		try {
- 
+			FileWriter out = new FileWriter("person.json");
+			out.write(obj.toJSONString()); // JSON 문자열로 형봔한
+			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,6 +120,18 @@ class MyFrame extends JFrame
 	void readData() {		
 		 
 		try {
+			
+			FileReader in = new FileReader("person.json");
+			JSONParser parse = new JSONParser();// json 파일을 하나씩 쏘개는 거
+			JSONObject obj = (JSONObject)parse.parse(in);
+			tfName.setText((String)obj.get("name"));
+			tfTel.setText((String)obj.get("tel"));
+			tfRsn.setText((String)obj.get("rsn"));
+			tfGender.setText((String)obj.get("gender"));
+			tfAge.setText((String)obj.get("age"));
+			tfHome.setText((String)obj.get("home"));
+			
+			in.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

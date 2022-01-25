@@ -142,7 +142,7 @@ class UIForm extends JFrame
 				// 텍스트 나열
 				
 				tfName.setText(name);
-				tfName.setText(r.getName());
+//				tfName.setText(r.getName());
 				
 //				tfAge.setText(Integer.toString(age));  // 정수형 스트링으로 
 				tfAge.setText(String.valueOf(age));
