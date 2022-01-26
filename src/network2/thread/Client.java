@@ -23,7 +23,7 @@ public class Client{
 		*/	
 		try{
 
-		//1. 소켓 객체 생성
+		//1. 소켓 객체 생성 // 서버를 찾아가라
 			cl = new Socket(HOST,PORT);
 		//2. 입력 스트림 생성
 			br = new DataInputStream(cl.getInputStream());

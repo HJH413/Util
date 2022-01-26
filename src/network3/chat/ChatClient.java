@@ -7,7 +7,7 @@ import java.io.*;
 import javax.swing.*;
 import java.util.*;
 
-class ChatClient implements ActionListener {
+class ChatClient extends Thread implements ActionListener {
 	JFrame f;
 
 	JTextField connTF, sendTF;
@@ -113,16 +113,44 @@ class ChatClient implements ActionListener {
 	}
 
 	void connProc() {
-		JOptionPane.showMessageDialog(null, "서버에 접속합니다");
+		//JOptionPane.showMessageDialog(null, "서버에 접속합니다");
+		try {
+			s = new Socket (connTF.getText() , 1234);
+			in = new BufferedReader(new InputStreamReader(s.getInputStream())); // BufferedReader문자형 InputStreamReader바이트를 문자형으로로 변환 getInputStream바이트
+			out = s.getOutputStream();
+			ta.setText("서버 접속 성공");
+			
+			this.start(); // start () -> run ()
+			
+		} catch(Exception ex) {
+			ta.setText("접속실패:" + ex.getMessage());
+		}
 	} // connProc ends
 	
 
 
 	void sendProc() {
-		JOptionPane.showMessageDialog(null, "메세지를 전송합니다");
+//		JOptionPane.showMessageDialog(null, "메세지를 전송합니다");
+		String msg = sendTF.getText() + "\n";
+		try {
+			out.write(msg.getBytes());
+		} catch (Exception ex) {
+			ta.append("메시지 전송 실패" + ex.getMessage());
+		} 
+		sendTF.setText(" ");
+		
 	}// sendProc ends
 	
-	
+	public void run() {
+		while (s.isConnected()) {
+			try {
+				String msg = in.readLine();
+				ta.append(msg + "\n"); // \n 개행문자
+			} catch (Exception ex) {
+				ta.append("데이타 읽기 실패" + ex.getMessage());
+			}
+		}
+	}
 	
 	public static void main(String [] args ) {
 		new ChatClient();
